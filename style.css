@@ -110,6 +110,9 @@ body {
   padding: 12px 14px; font-size: .9rem; line-height: 1.45;
   box-shadow: 0 4px 12px rgba(58,51,64,.08);
 }
+.other-game { display: inline-block; margin-top: 12px; font-size: .85rem; font-weight: 700;
+  color: var(--purple-d); text-decoration: none; }
+.other-game:hover { text-decoration: underline; }
 
 /* ---------- panels / scenes ---------- */
 .stage { min-width: 0; }

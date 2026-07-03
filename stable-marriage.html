@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Игра в сваху — задача о стабильных браках (алгоритм Гейла–Шепли)</title>
+  <link rel="stylesheet" href="stable-marriage.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%98%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="bg-hearts" id="bgHearts" aria-hidden="true"></div>
+
+  <div class="app">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Игра в сваху <span class="heart">💘</span></h1>
+        <p class="brand-sub">задача о стабильных браках<br>и алгоритм Гейла–Шепли</p>
+      </div>
+
+      <nav class="scene-nav" id="sceneNav">
+        <button class="nav-item active" data-scene="scene-intro"><span class="n">1</span> Вступление</button>
+        <button class="nav-item" data-scene="scene-pair"><span class="n">2</span> Собери пары</button>
+        <button class="nav-item" data-scene="scene-chaos"><span class="n">3</span> Хаос</button>
+        <button class="nav-item" data-scene="scene-stable"><span class="n">4</span> Что такое стабильность</button>
+        <button class="nav-item" data-scene="scene-step"><span class="n">5</span> Алгоритм по шагам</button>
+        <button class="nav-item" data-scene="scene-auto"><span class="n">6</span> Авто-прогон</button>
+        <button class="nav-item" data-scene="scene-verify"><span class="n">7</span> Проверка</button>
+        <button class="nav-item" data-scene="scene-sandbox"><span class="n">8</span> Песочница</button>
+        <button class="nav-item" data-scene="scene-final"><span class="n">9</span> Итог 🎓</button>
+      </nav>
+
+      <div class="helper">
+        <div class="helper-art" id="helperArt"></div>
+        <div class="helper-tip">
+          Совет: список симпатий виден прямо на карточке — сверху те, кто нравится больше.
+          Текущий партнёр отмечен 💞.
+        </div>
+      </div>
+
+      <a class="other-game" href="index.html">← другая игра: «Привередливая невеста»</a>
+    </aside>
+
+    <!-- ================= MAIN STAGE ================= -->
+    <main class="stage">
+
+      <!-- ---------- SCENE 1 ---------- -->
+      <section class="scene active" id="scene-intro">
+        <div class="panel">
+          <div class="panel-head"><span class="badge badge-peach">1</span><h2>Вступление</h2></div>
+          <div class="panel-body">
+            <div class="intro-grid">
+              <div>
+                <div class="speech">
+                  <p>Есть несколько мужчин 👨 и несколько женщин 👩. Все хотят найти пару.</p>
+                  <p>Казалось бы — просто соедини всех как-нибудь, и готово. Но нет!</p>
+                  <p>Если найдутся двое, которые <strong>нравятся друг другу больше,</strong>
+                     чем их нынешние партнёры — они сбегут вместе, и всё развалится. 💔</p>
+                  <p>Можно ли составить пары так, чтобы <span class="accent">никто не хотел сбежать</span>?
+                     Давай проверим на себе.</p>
+                </div>
+                <button class="btn btn-green btn-big" data-scene="scene-pair">Начать →</button>
+              </div>
+              <div class="intro-art" id="introArt"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 2 ---------- -->
+      <section class="scene" id="scene-pair">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">2</span><h2>Собери пары</h2>
+            <span class="counter-pill" id="pairCounter">Соединено: 0 / 5</span>
+          </div>
+          <div class="panel-body">
+            <p class="hint-line">
+              Перетащи 🖱️ от мужчины к женщине, чтобы соединить их (на телефоне — тяни пальцем).
+              Загляни в их симпатии кнопкой ❤️. Соедини все 5 пар и жми «Проверить».
+            </p>
+            <div class="board" id="board2"></div>
+            <div class="nav-row">
+              <button class="btn btn-ghost" id="btnShuffle2">🎲 Другие люди</button>
+              <button class="btn btn-green" id="btnCheck2" disabled>Проверить пары →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 3 ---------- -->
+      <section class="scene" id="scene-chaos">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">3</span><h2>Хаос</h2></div>
+          <div class="panel-body">
+            <p class="hint-line" id="chaosIntro">Вот пары, которые ты составила. Всё ли спокойно?</p>
+            <div class="board" id="board3"></div>
+            <div class="chaos-msg" id="chaosMsg"></div>
+            <div class="nav-row">
+              <button class="btn btn-pink" id="btnChaos">🔥 Найти нестабильные пары</button>
+              <button class="btn btn-green" id="btnToStable" data-scene="scene-stable" hidden>Что же делать? →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 4 ---------- -->
+      <section class="scene" id="scene-stable">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">4</span><h2>Что такое стабильность</h2></div>
+          <div class="panel-body">
+            <div class="speech speech-wide">
+              <p>Распределение называется <strong>стабильным</strong>, если
+                 <span class="accent">нет ни одной пары мужчины и женщины,
+                 которые оба предпочли бы друг друга своим нынешним партнёрам.</span></p>
+              <p>То есть сбежать не с кем: для любой «запретной» парочки хотя бы одному из них
+                 и так лучше там, где он есть.</p>
+            </div>
+            <div class="board" id="board4"></div>
+            <p class="hint-line" id="stableExample"></p>
+            <div class="nav-row">
+              <button class="btn btn-ghost" data-scene="scene-chaos">← Назад</button>
+              <button class="btn btn-green" data-scene="scene-step">Как такое построить? →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 5 ---------- -->
+      <section class="scene" id="scene-step">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">5</span><h2>Алгоритм по шагам</h2></div>
+          <div class="panel-body">
+            <div class="speech">
+              <p>Правило простое: свободный мужчина делает предложение самой симпатичной женщине,
+                 которой ещё не предлагал. Женщина оставляет лучшего из ухажёров, остальным — отказ.
+                 Отвергнутый снова становится свободным. Жми «Следующий шаг»!</p>
+            </div>
+            <div class="board" id="board5"></div>
+            <div class="log" id="log5"><div class="log-line">Готов начать. Все мужчины свободны.</div></div>
+            <div class="nav-row">
+              <button class="btn btn-ghost" id="btnResetStep">↺ Заново</button>
+              <button class="btn btn-purple" id="btnStep">Следующий шаг →</button>
+              <button class="btn btn-green" data-scene="scene-auto" id="btnToAuto" hidden>Ускорить! →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 6 ---------- -->
+      <section class="scene" id="scene-auto">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">6</span><h2>Авто-прогон</h2></div>
+          <div class="panel-body">
+            <p class="hint-line">Теперь запусти весь процесс целиком и смотри, как линии перестраиваются.</p>
+            <div class="board" id="board6"></div>
+            <div class="result-banner" id="result6" hidden></div>
+            <div class="nav-row">
+              <button class="btn btn-ghost" id="btnResetAuto">↺ Заново</button>
+              <button class="btn btn-purple btn-big" id="btnAuto">▶ Автоматически</button>
+              <button class="btn btn-green" data-scene="scene-verify" id="btnToVerify" hidden>Проверить результат →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 7 ---------- -->
+      <section class="scene" id="scene-verify">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">7</span><h2>Проверка на прочность</h2></div>
+          <div class="panel-body">
+            <p class="hint-line">
+              Попробуй развалить результат! Кликни одного мужчину и одну женщину —
+              игра объяснит, почему они <strong>не смогут</strong> сбежать вместе.
+            </p>
+            <div class="board" id="board7"></div>
+            <div class="verify-box" id="verifyBox">Выбери мужчину и женщину…</div>
+            <div class="nav-row">
+              <button class="btn btn-ghost" id="btnClearVerify">Сбросить выбор</button>
+              <button class="btn btn-green" data-scene="scene-sandbox">В песочницу 🧪 →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 8 ---------- -->
+      <section class="scene" id="scene-sandbox">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">8</span><h2>Песочница</h2></div>
+          <div class="panel-body">
+            <div class="controls-row">
+              <div class="field">
+                <label>Сколько пар</label>
+                <div class="chip-row" id="sbNChips" data-value="6">
+                  <button class="chip" data-val="4">4</button>
+                  <button class="chip active" data-val="6">6</button>
+                  <button class="chip" data-val="8">8</button>
+                  <button class="chip" data-val="10">10</button>
+                  <button class="chip" data-val="20">20</button>
+                </div>
+              </div>
+              <div class="field">
+                <label>Скорость</label>
+                <div class="chip-row" id="sbSpeedChips" data-value="450">
+                  <button class="chip" data-val="900">🐢</button>
+                  <button class="chip active" data-val="450">🚶</button>
+                  <button class="chip" data-val="150">🐇</button>
+                </div>
+              </div>
+              <div class="field">
+                <label>Кто делает предложения?</label>
+                <div class="chip-row" id="sbSideChips" data-value="M">
+                  <button class="chip active" data-val="M">👨 Мужчины</button>
+                  <button class="chip" data-val="W">👩 Женщины</button>
+                </div>
+              </div>
+            </div>
+            <div class="nav-row" style="justify-content:flex-start">
+              <button class="btn btn-ghost" id="btnSbRegen">🎲 Новые предпочтения</button>
+              <button class="btn btn-purple" id="btnSbRun">▶ Запустить алгоритм</button>
+            </div>
+
+            <div class="board" id="board8"></div>
+            <div class="result-banner" id="result8" hidden></div>
+
+            <div class="happiness" id="happiness" hidden>
+              <h3>Насколько все довольны? (чем меньше — тем лучше место партнёра в списке)</h3>
+              <div class="happy-bars">
+                <div class="happy-row"><span>👨 мужчины</span><div class="bar"><i id="barM"></i></div><b id="valM">—</b></div>
+                <div class="happy-row"><span>👩 женщины</span><div class="bar"><i id="barW"></i></div><b id="valW">—</b></div>
+              </div>
+              <p class="surprise" id="surpriseNote"></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 9 ---------- -->
+      <section class="scene" id="scene-final">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">9</span><h2>Итог 🎓</h2></div>
+          <div class="panel-body">
+            <div class="speech speech-wide">
+              <p><strong>Что это было.</strong> Задача о стабильных браках: как разбить людей на пары так,
+                 чтобы никто не захотел сбежать. Мы решали её алгоритмом Гейла–Шепли —
+                 «предложения и отказы».</p>
+              <p><strong>Почему алгоритм всегда заканчивается.</strong> Каждый предлагает каждому из списка
+                 не больше одного раза. Предложения не повторяются — значит, шаги когда-нибудь кончатся.</p>
+              <p><strong>Почему результат стабилен.</strong> Женщина «улучшает» партнёра только вверх по своему списку.
+                 Если бы кто-то хотел сбежать к ней — значит, он ей предлагал и получил отказ, а отказала
+                 она только тому, кто ей нравится меньше нынешнего. Сбегать некуда.</p>
+              <p><strong>Почему важно, кто предлагает.</strong> Сторона, которая <em>делает</em> предложения,
+                 получает <span class="accent">самый выгодный для себя</span> стабильный результат, а принимающая —
+                 наименее выгодный. Поменяй их ролями — и картинка изменится (проверь в песочнице!).</p>
+            </div>
+
+            <div class="cards-3">
+              <div class="mini-card"><div class="mc-emoji">🏥</div>распределение выпускников медвузов по больницам</div>
+              <div class="mini-card"><div class="mc-emoji">🏫</div>распределение учеников по школам</div>
+              <div class="mini-card"><div class="mc-emoji">🫀</div>обмен донорскими почками</div>
+            </div>
+
+            <div class="speech speech-wide history">
+              <p>📜 <strong>История.</strong> В <strong>1962 году</strong> алгоритм предложили
+                 <strong>Дэвид Гейл</strong> и <strong>Ллойд Шепли</strong>. За теорию устойчивых распределений
+                 и её применение на практике <strong>Ллойд Шепли и Алвин Рот</strong> получили
+                 <strong>Нобелевскую премию по экономике в 2012 году</strong>.</p>
+            </div>
+
+            <div class="nav-row">
+              <button class="btn btn-ghost" data-scene="scene-intro">🏠 В начало</button>
+              <button class="btn btn-green" data-scene="scene-sandbox">Ещё поиграть 🧪</button>
+            </div>
+            <p class="credits">
+              Интерактивное объяснение в духе Nicky Case «The Evolution of Trust».
+              Все персонажи нарисованы процедурно через SVG.
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="stable-marriage.js"></script>
+</body>
+</html>

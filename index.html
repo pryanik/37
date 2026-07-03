@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Привередливая невеста — как выбрать лучшего жениха и не сойти с ума</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%91%B0%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <div class="bg-hearts" id="bgHearts" aria-hidden="true"></div>
+
+  <div class="app">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar">
+      <div class="brand">
+        <h1>Привередливая<br>невеста <span class="heart">♥</span></h1>
+        <p class="brand-sub">или<br>как выбрать лучшего жениха<br>и не сойти с ума</p>
+      </div>
+
+      <nav class="scene-nav" id="sceneNav">
+        <button class="nav-item active" data-scene="scene-intro"><span class="n">1</span> Вступление</button>
+        <button class="nav-item" data-scene="scene-play"><span class="n">2</span> Первая попытка</button>
+        <button class="nav-item" data-scene="scene-stats"><span class="n">3</span> Что происходит?</button>
+        <button class="nav-item" data-scene="scene-strategy"><span class="n">4</span> Стратегия 37%</button>
+        <button class="nav-item" data-scene="scene-why"><span class="n">5</span> Почему 37%?</button>
+        <button class="nav-item" data-scene="scene-sandbox"><span class="n">6</span> Песочница</button>
+      </nav>
+
+      <div class="helper">
+        <div class="helper-art" id="helperArt"><!-- bride svg --></div>
+        <div class="helper-tip" id="helperTip">
+          Твоя цель — выбрать самого лучшего жениха из всей очереди.
+          Но помни: назад вернуться <strong>нельзя!</strong>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ================= MAIN STAGE ================= -->
+    <main class="stage">
+
+      <!-- ---------- SCENE 1: ВСТУПЛЕНИЕ ---------- -->
+      <section class="scene active" id="scene-intro">
+        <div class="panel">
+          <div class="panel-head"><span class="badge badge-peach">1</span><h2>Вступление</h2></div>
+          <div class="panel-body two-col">
+            <div>
+              <div class="speech">
+                <p>Перед тобой будет очередь женихов. Каждый появляется только один раз.</p>
+                <p>После встречи нужно сразу решить: <strong>выбрать его</strong> или
+                   <strong>отпустить навсегда</strong>.</p>
+                <p>Твоя цель — выбрать <span class="accent">самого лучшего</span>!</p>
+              </div>
+              <button class="btn btn-green btn-big" data-scene="scene-play">Начать →</button>
+            </div>
+            <div class="hero-art" id="heroArt"><!-- bride + queue svg --></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 2: ПЕРВАЯ ПОПЫТКА ---------- -->
+      <section class="scene" id="scene-play">
+        <div class="panel">
+          <div class="panel-head">
+            <span class="badge">2</span><h2>Первая попытка</h2>
+            <span class="counter-pill" id="playCounter">Кандидат 1 из 12</span>
+          </div>
+          <div class="panel-body">
+            <div class="play-grid">
+              <!-- current suitor + speech + buttons -->
+              <div class="play-main">
+                <div class="suitor-stage" id="suitorStage"></div>
+                <div class="decision-row" id="decisionRow">
+                  <button class="btn btn-green" id="btnAccept">💍 Выбрать его!</button>
+                  <button class="btn btn-pink" id="btnReject">👋 Отпустить навсегда</button>
+                </div>
+              </div>
+              <!-- who you've met so far -->
+              <aside class="met-panel">
+                <h3>Кого ты уже встретила</h3>
+                <div class="met-list" id="metList"></div>
+                <div class="met-caption" id="metCaption"></div>
+              </aside>
+            </div>
+            <!-- progress queue -->
+            <div class="queue" id="playQueue"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 3: ЧТО ПРОИСХОДИТ? ---------- -->
+      <section class="scene" id="scene-stats">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">3</span><h2>Что происходит?</h2></div>
+          <div class="panel-body">
+            <p class="hint-line" id="statsIntro">
+              Сыграй «Первую попытку», чтобы увидеть всю очередь и результат 👆
+            </p>
+            <div class="reveal-host" id="statsReveal"></div>
+
+            <div class="speech speech-wide">
+              <p>Слишком <strong>ранний</strong> выбор опасен — лучший ещё может прийти.</p>
+              <p>Слишком <strong>позднее</strong> ожидание тоже — отвергнешь лучшего и останешься
+                 с кем попало.</p>
+              <p>Нужно сначала <strong>изучить рынок</strong>, а потом действовать. Но сколько именно смотреть?</p>
+            </div>
+
+            <div class="nav-row">
+              <button class="btn btn-ghost" data-scene="scene-play">↩ Сыграть ещё раз</button>
+              <button class="btn btn-purple" data-scene="scene-strategy">Попробовать стратегию →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 4: СТРАТЕГИЯ 37% ---------- -->
+      <section class="scene" id="scene-strategy">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">4</span><h2>Стратегия 37%</h2></div>
+          <div class="panel-body">
+            <div class="strat-grid">
+              <div class="strat-controls">
+                <div class="speech">
+                  <p>Сначала просто <strong>смотри</strong> на женихов и никого не выбирай,
+                     а потом возьми <strong>первого, кто лучше всех предыдущих</strong>.</p>
+                </div>
+                <label class="slider-label" for="stratSlider">
+                  Сколько процентов сначала просто смотреть?
+                  <strong class="pct-tag"><span id="stratPct">37</span>%</strong>
+                </label>
+                <input type="range" id="stratSlider" min="0" max="90" value="37" step="1" />
+                <div class="phase-bar">
+                  <div class="phase observe" id="stratObserve">👀 наблюдаю</div>
+                  <div class="phase choose" id="stratChoose">💘 выбираю</div>
+                </div>
+                <button class="btn btn-purple btn-big" id="btnRunStrat">Запустить 1000 симуляций 🎲</button>
+              </div>
+
+              <div class="strat-chart">
+                <h3 class="chart-title">Вероятность выбрать лучшего жениха</h3>
+                <div class="chart-wrap">
+                  <canvas id="stratChart" width="720" height="360"></canvas>
+                </div>
+                <button class="btn btn-ghost" id="btnDrawCurve">Построить кривую 📈</button>
+              </div>
+
+              <div class="strat-result">
+                <h3>Результат симуляции</h3>
+                <div class="big-number"><span id="stratWinPct">—</span>%</div>
+                <div class="big-number-cap">из 1000 симуляций ты выбрала лучшего жениха</div>
+                <p class="strat-note">
+                  Оптимум около 37% — это не магия. Это математика! (не пугайся, дальше будет
+                  интуитивно и красиво)
+                </p>
+              </div>
+            </div>
+
+            <div class="nav-row">
+              <button class="btn btn-ghost" data-scene="scene-play">↩ Сыграть ещё раз</button>
+              <button class="btn btn-purple" data-scene="scene-why">Почему 37%? →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 5: ПОЧЕМУ 37%? ---------- -->
+      <section class="scene" id="scene-why">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">5</span><h2>Почему 37%?</h2></div>
+          <div class="panel-body">
+            <p class="hint-line">Представь 100 женихов в очереди.</p>
+
+            <div class="phase-explain">
+              <div class="phase-line" id="whyLine"></div>
+              <div class="phase-split">
+                <div class="split obs"><strong>37%</strong><br>фаза наблюдения:<br>просто смотри и запоминай лучших</div>
+                <div class="split cho"><strong>63%</strong><br>фаза выбора:<br>бери первого, кто лучше всех, кого ты видела</div>
+              </div>
+            </div>
+
+            <div class="why-row">
+              <div class="why-bride" id="whyBride"></div>
+              <div class="speech">
+                <p>Лучше всего сначала собрать информацию — но не слишком долго. Мало посмотришь —
+                   выбираешь наугад. Долго ждёшь — всех хороших уже разобрали.</p>
+                <p>В пределе оптимальная доля равна <strong>1 / e ≈ 36.8%</strong>.
+                   Не потому что мы так хотим, а потому что так устроен шанс! ✨</p>
+              </div>
+            </div>
+
+            <div class="speech speech-wide history">
+              <p>📜 <strong>Немного истории.</strong> Это не мы придумали! Задачу называют
+                 <em>«задача о секретаре»</em> (а ещё — «о разборчивой невесте», «о приданом султана»,
+                 «задача наилучшего выбора»).</p>
+              <p>Её широко популяризировал <strong>Мартин Гарднер</strong> в колонке
+                 <em>Mathematical Games</em> журнала <em>Scientific American</em> в
+                 <strong>1960 году</strong>. Строгое решение с числом <strong>1/e</strong>
+                 в начале 1960-х дали математики <strong>Деннис Линдли (1961)</strong> и
+                 <strong>Юджин Дынкин (1963)</strong>, а подробный разбор —
+                 <strong>Гилберт и Мостеллер (1966)</strong>.</p>
+            </div>
+
+            <div class="nav-row">
+              <button class="btn btn-ghost" data-scene="scene-strategy">← Назад</button>
+              <button class="btn btn-green" data-scene="scene-sandbox">Открыть песочницу 🧪</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- SCENE 6: ПЕСОЧНИЦА ---------- -->
+      <section class="scene" id="scene-sandbox">
+        <div class="panel">
+          <div class="panel-head"><span class="badge">6</span><h2>Песочница</h2></div>
+          <div class="panel-body">
+            <div class="sandbox-grid">
+              <div class="controls">
+                <div class="field">
+                  <label>Количество женихов</label>
+                  <div class="chip-row" id="sbNChips" data-value="100">
+                    <button class="chip" data-val="10">10</button>
+                    <button class="chip" data-val="20">20</button>
+                    <button class="chip" data-val="50">50</button>
+                    <button class="chip active" data-val="100">100</button>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Процент наблюдения: <strong><span id="sbPct">37</span>%</strong></label>
+                  <input type="range" id="sbSlider" min="0" max="90" value="37" step="1" />
+                </div>
+
+                <div class="field">
+                  <label>Число симуляций</label>
+                  <div class="chip-row" id="sbTrialsChips" data-value="1000">
+                    <button class="chip" data-val="100">100</button>
+                    <button class="chip active" data-val="1000">1000</button>
+                    <button class="chip" data-val="5000">5000</button>
+                  </div>
+                </div>
+
+                <label class="checkbox">
+                  <input type="checkbox" id="sbPickLast" checked />
+                  <span>Если никто не лучше — взять последнего</span>
+                </label>
+
+                <button class="btn btn-green btn-big" id="btnSimulate">Симулировать! 🎲</button>
+              </div>
+
+              <div class="sandbox-results" id="sbResults">
+                <div class="result-tile">
+                  <div class="rt-num" id="sbBestPct">—</div>
+                  <div class="rt-cap">шанс выбрать лучшего</div>
+                </div>
+                <div class="result-tile">
+                  <div class="rt-num" id="sbAvgScore">—</div>
+                  <div class="rt-cap">средний рейтинг выбранного (из 100)</div>
+                </div>
+                <div class="result-tile">
+                  <div class="rt-num" id="sbAlone">—</div>
+                  <div class="rt-cap">осталась ни с чем</div>
+                </div>
+                <div class="result-tile tile-gold">
+                  <div class="rt-num" id="sbOptimal">—</div>
+                  <div class="rt-cap">лучший процент наблюдения</div>
+                </div>
+              </div>
+            </div>
+
+            <p class="credits">
+              Интерактивное объяснение в духе Nicky Case «The Evolution of Trust».
+              Математика — классическая «задача о привередливой невесте» (secretary problem).
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
